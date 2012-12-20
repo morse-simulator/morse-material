@@ -1,0 +1,1245 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8">
+<title>Introduction to MORSE</title>
+<link href="js/prettify/prettify.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="js/prettify/prettify.js"></script>
+
+<section>
+    <h1>An Introduction to MORSE<br/>The Modular OpenRobots Simulation Engine</h1>
+    <footer>
+    <img style="float:left; margin:0px;width:auto;height:100px" src="images/morse-logo.png"/>
+    Séverin Lemaignan <br /> Dec, 20th, 2012</footer>
+</section>
+
+<section>
+    <figure>
+        <img src="images/catmouse.jpg" alt="The Cat & Mouse game" />
+        <figcaption style="color:white">First demo: Chasing the mouse!</figcaption>
+    </figure>
+    <details>
+    We start the presentation with a concrete example: the 'Cat and Mouse' game <br/>
+    Do the full demo, but without too many explantions (for now):
+        <ul>
+            <li> write in live a script to have 2 ATRVs and the required sensors/actuators
+            <li> start it in MORSE
+            <li> write a small client to move the cat
+            <li> play a bit with it
+        </ul>
+    </details>
+</section>
+
+<section>
+<h3>Example breakdown</h3>
+
+<div class="incremental">
+<pre class="prettyprint">
+from morse.builder import *
+</pre>
+<pre class="prettyprint">
+# Our mouse
+mouse = Robot('atrv')
+mouse.name = "MOUSE"
+mouse.translate (x=1.0, z=0.2)
+mouse.properties(Object = True, Graspable = False, Label = "MOUSE")
+</pre>
+<pre class="prettyprint">
+
+keyb = Actuator('keyboard')
+keyb.properties(Speed=3.0)
+mouse.append(keyb)
+
+</pre>
+</div>
+</section>
+
+<section>
+<h3>Example breakdown (continued)</h3>
+
+<div class="incremental">
+
+<pre class="prettyprint">
+# Our cat
+cat = Robot('atrv')
+cat.name = "CAT"
+cat.translate(x=-6.0, z=0.2)
+cat.default_interface('socket')
+</pre>
+<pre class="prettyprint">
+
+camera_L = Sensor('semantic_camera')
+camera_L.translate(x=0.2, y=0.3, z=0.9)
+cat.append(camera_L)
+
+camera_R = Sensor('semantic_camera')
+camera_R.translate(x=0.2, y=-0.3, z=0.9)
+cat.append(camera_R)
+</pre>
+<pre class="prettyprint">
+
+V_W = Actuator('v_omega')
+cat.append(V_W)
+</pre>
+<pre class="prettyprint">
+
+# The environment
+env = Environment('land-1/trees')
+
+</pre>
+</div>
+<details>
+</details>
+</section>
+
+
+<section>
+    <h2>Presentation outline</h2>
+    <ul>
+      <li>MORSE foundations
+      <li>Modularity and the MORSE main loop
+      <li>Inside MORSE's <em>components</em>
+      <li>Interfacing with the real world
+      <li>Real-world use-case: the ROS navigation tutorial
+      <li>Other features
+    </ul>
+</section>
+
+<section>
+    <h2>MORSE foundations</h2>
+</section>
+
+
+
+
+<section>
+    <h2>The MORSE project</h2>
+    <ul>
+      <li>100% open-source, permissive BSD-like license
+      <li>Initiated at LAAS-CNRS in 2009
+      <li>As of Dec 2012, contributions by 10 institutions worldwide
+      <li>15 different contributors for the last release
+      <li>~20K LOC, mostly Python
+    </ul>
+</section>
+
+
+<section>
+    <figure>
+        <img src="images/blender.jpg" alt="Blender interface" />
+        <figcaption style="color:white">Blender and Blender Game Engine</figcaption>
+        <video style="position:absolute;top:70px; right:0px;width:260px" src="videos/bge-bathroom.webm"></video>
+        <video style="position:absolute;top:290px; right:0px;width:260px" src="videos/bge-yofrankie.webm"></video>
+    </figure>
+    <details>
+        <ul>
+            <li> primary a 3D modeller
+            <li> provide a 3D game engine, support shaders
+            <li> Switch from the modeller to the simulation == press 'P'
+            <li> BGE: written in C++, extensible in Python + logic bricks
+        </ul>
+    </details>
+</section>
+
+<section>
+	<figure>
+        <video style="left:0px" src="videos/bullet.webm"></video> 
+        <figcaption style="color:white"> Bullet physics engine </figcaption>
+        <reference>Video by <tt>microcontroled1204</tt> (<a href="http://www.youtube.com/watch?v=3GuQhYfl2EE">YouTube</a>)</reference>
+    </figure>
+    <details>
+    <ul>
+        <li>Bullet is integrated to the BGE, state-of-the art open-source library
+        <li>support for rigid bodies and soft bodies simulation
+        <li>limited support for dynamics (Vehicle class)
+    </ul>
+    </details>
+</section>
+
+<section>
+    <h2>Modularity <br/>and the MORSE main loop</h2>
+</section>
+
+<section>
+    <figure>
+        <img src="images/realism-0.svg" alt="Levels of abstraction: level 0" />
+        <figcaption>Levels of abstraction: vision level</figcaption>
+    </figure>
+    <details>
+    This set of 4 slides show how MORSE can be used at different level of abstraction: from 'few things simulated, lot of robot software running' to 'almost everything simulated, only high-level robot softwares'.
+    </details>
+</section>
+
+<section>
+    <figure>
+        <img src="images/realism-1.svg" alt="Levels of abstraction: level 1" />
+        <figcaption>Levels of abstraction: depth map level</figcaption>
+    </figure>
+</section>
+
+<section>
+    <figure>
+        <img src="images/realism-2.svg" alt="Levels of abstraction: level 2" />
+        <figcaption>Levels of abstraction: terrain level</figcaption>
+    </figure>
+</section>
+
+<section>
+    <figure>
+        <img src="images/realism-3.svg" alt="Levels of abstraction: level 3" />
+        <figcaption>Levels of abstraction: semantic level</figcaption>
+    </figure>
+</section>
+
+<section>
+    <figure class="vertical">
+        <img src="images/sail.svg" alt="SAIL architecture" />
+        <figcaption>SAIL: <em>Software Architecture In the Loop</em></figcaption>
+    </figure>
+    <details>
+    A seamless transition of the robotics functions from a simulated case to an actual robot is essential.
+
+    ⇒ Middleware independence + middleware connectivity
+    </details>
+</section>
+
+
+<section>
+    <figure class="vertical">
+        <img src="images/main_loop.svg" alt="MORSE main loop" />
+        <!--<figcaption>The MORSE main loop</figcaption>-->
+    </figure>
+    <details>
+    </details>
+</section>
+
+
+<section>
+    <h3>The MORSE main loop: summary</h3>
+    <ul class="incremental" style="font-size:0.8em">
+        <li>2 interactions modalities: <b>datastreams</b> and <b>services</b>,
+        <li>datastreams: <b>published</b> by MORSE for sensors, <b>read</b> for actuators,
+        <li>components write or read only the <tt>local_data</tt> structure. They are <b>not aware</b> of surrounding interfaces/modifiers,
+        <li>modifiers alter the sensors/actuators data, typically to add noise,
+        <li><tt>local_data</tt> is exported/imported by <b>external interfaces</b> like sockets,
+        <li>services: RPC-style interaction, can be <b>synchronous</b> or <b>asynchronous</b>
+    </ul>
+</section>
+
+
+<section>
+    <h2>Inside MORSE's <em>components</em></h2>
+</section>
+
+<section>
+    <a href="http://www.openrobots.org/morse/doc/latest/components_library.html">
+    <figure>
+        <img src="images/components.jpg" alt="Available robotic bases" />
+    </figure>
+    </a>
+
+<details>
+A click on the image redirect to MORSE Component Library in the on-line doc.<br/>
+
+Scroll there to quickly show the available components.
+</details>
+</section>
+
+<section>
+<h3>What is a component?</h3>
+
+<pre class="prettyprint">
+import morse.core.sensor
+
+class GPS(morse.core.sensor.Sensor):
+
+    add_data('x', 0.0, 'float', 'X position in the world')
+    add_data('y', 0.0, 'float', 'Y position in the world')
+    add_data('z', 0.0, 'float', 'Z position in the world')
+
+    def __init__(self, obj, parent=None):
+        super(self.__class__,self).__init__(obj, parent)
+
+    def default_action(self):
+
+        x = self.position_3d.x
+        y = self.position_3d.y
+        z = self.position_3d.z
+
+        # Store the data acquired by this sensor that could be sent
+        #  via a middleware.
+        self.local_data['x'] = float(x)
+        self.local_data['y'] = float(y)
+        self.local_data['z'] = float(z)
+</pre>
+<details>
+The GPS sensor implementation.<br/>
+
+Important stuff:
+<ul>
+    <li> Explicit declaration of exported data
+    <li> The sensor is 'perfect'
+    <li> It only manipulates its <tt>local_data</tt> (to <b>write</b> values)
+</ul>
+</details>
+</section>
+
+<section>
+
+<pre class="prettyprint">
+from morse.core.services import service
+import morse.core.actuator
+
+class VWActuator(morse.core.actuator.Actuator):
+
+    add_data('x', 0.0, 'float', 'linear velocity towards x (m/s)')
+    add_data('w', 0.0, 'float', 'angular velocity (rad/s)')
+
+    def __init__(self, obj, parent=None):
+        super(self.__class__, self).__init__(obj, parent)
+
+    @service
+    def set_speed(self, v, w):
+        self.local_data['v'] = v
+        self.local_data['w'] = w
+
+    @service
+    def stop(self):
+        self.local_data['v'] = 0.0
+        self.local_data['w'] = 0.0
+
+    def default_action(self):
+        vx, vy, vz = 0.0, 0.0, 0.0
+        rx, ry, rz = 0.0, 0.0, 0.0
+
+        # Scale the speeds to the time used by Blender
+        vx = self.local_data['v'] / self.frequency
+        rz = self.local_data['w'] / self.frequency
+
+        # Give the movement instructions directly to the parent
+        parent = self.robot_parent.blender_obj
+        parent.applyMovement([vx, vy, vz], True)
+        parent.applyRotation([rx, ry, rz], True)
+</pre>
+<details>
+The (V,W) actuator implementation.<br/>
+
+Important stuff:
+<ul>
+    <li> Exported services are regular Python function, simply decorated with <tt>@service</tt> (or <tt>@async_service</tt> for asynchronous services)
+    <li> This time, we <b>read</b> <tt>local_data</tt>
+    <li> Interaction with the 3D world via the Blender's Python API
+    <li> Components may have independant running frequencies
+</ul>
+</details>
+</section>
+
+<section>
+<h3>MORSE Components</h3>
+<ul class="incremental">
+<li>Components are <b>sensors</b>, <b>actuators</b> or <b>robots</b>,
+<li>They are defined by a mandatory Python description,
+<li>They usually come with a Blender mesh as well.
+</ul>
+</section>
+<section>
+    <h2>Interfacing with the real world</h2>
+</section>
+
+<section>
+<h3>The Cat Controller</h3>
+
+<div class="incremental">
+<pre class="prettyprint">
+import pymorse
+</pre>
+<pre class="prettyprint">
+def visible(data):
+    objects = [obj["name"] for obj in data["visible_objects"]]
+    return "MOUSE" in objects
+</pre>
+<pre class="prettyprint">
+
+with pymorse.Morse() as simu:
+</pre>
+<pre class="prettyprint">
+    v_w_prev = None
+    while True:
+        seen_left = visible(simu.CAT.Camera_L.last())
+        seen_right = visible(simu.CAT.Camera_R.last())
+</pre>
+<pre class="prettyprint">
+
+        if seen_left and seen_right:
+            v_w = {"v": 2, "w": 0}
+        elif seen_left:
+            v_w = {"v": 1.5, "w": 1}
+        elif seen_right:
+            v_w = {"v": 1.5, "w": -1}
+        else:
+            v_w = {"v": 0, "w": -1}
+
+        if v_w != v_w_prev:
+            simu.CAT.V_W.publish(v_w)
+            v_w_prev = v_w
+</pre>
+</div>
+<details>
+The CAT Controller: socket based interface, wrapped in the <tt>pymorse</tt> bindings.<br/>
+
+Important stuff:
+<ul>
+    <li> Auto-discovery of the simulation strucutres (robots, components)
+    <li> Access to streams either to write (<tt>publish</tt>) or read (<tt>get</tt>, <tt>last</tt> or <tt>subscribe</tt>
+</ul>
+</details>
+</section>
+
+<section>
+    <h3>Interfaces</h3>
+    <ul class="incremental" style="font-size:0.8em">
+        <li>Generic: <em>sockets</em>, <em>text</em>,
+        <li>Specific to robotics: <em>middlewares</em>
+            <ul>
+            <li><img style="height: 21px; margin-bottom: -5px;" src="images/logo-ros.png" />
+            <li><img style="height: 21px; margin-bottom: -5px;" src="images/logo-yarp.png" />
+            <li>GenoM/pocolibs
+            <li>MOOS
+            </ul>
+        <li>Again, two main interaction types: <em>RPC-oriented</em> or <em>datastream-oriented</em>
+        <li>Language <em>bindings</em> available for Python. Easy to develop for other languages through the socket interface.
+    </ul>
+</section>
+
+<section>
+    <h3>Serialization/Deserialization</h3>
+    <div class="incremental">
+    <ul style="font-size:0.8em">
+        <li>Generally speaking, each pair (component, interface) requires specific serialization/deserialization
+        <li>Practically, many cases are automated (eg, JSON on sockets)
+        <li>Specific marshalling functions can be provided to MORSE.
+    </ul>
+        <a href="http://www.openrobots.org/morse/doc/latest/user/integration.html"><img style="margin-left:120px;margin-top:-30px;width:70%" src="images/middleware-support.jpg" alt="Glimpse on the middleware support matrix" /></a>
+</div>
+</section>
+
+
+<section>
+    <h2 style="margin-top:50px">Real-world use-case:<br/>ROS navigation tutorial</h2>
+        <img style="top:100px;width:100%" src="images/ros_nav.png" alt="ROS navigation demonstration" />
+    <details>
+    We start the presentation with a concrete example: the 'Cat and Mouse' game <br/>
+    Do the full demo, but without too many explantions (for now):
+        <ul>
+            <li> write in live a script to have 2 ATRVs and the required sensors/actuators
+            <li> start it in MORSE
+            <li> write a small client to move the cat
+            <li> play a bit with it
+        </ul>
+    </details>
+</section>
+
+<section>
+<h3>Steps</h3>
+<ul class="incremental">
+<li>Initial scene, <tt>roscore</tt>, RVIZ, odometry frame
+<li>Displaying the full robot
+<li>Building a map: laser scans, <tt>gmapping</tt>, <tt>map_server</tt>
+<li>Localization: Monte-Carlo localization estimation
+<li>Navigation: (Vx, Vy, ω) actuator and ROS <tt>2D_nav</tt>
+</ul>
+</section>
+
+<section>
+    <h2>Other features</h2>
+
+<ul>
+    <li>Modifiers
+    <li>Human-Robot Interaction simulation
+    <li>Large scale simulation
+</ul>
+</section>
+
+<section>
+    <h3>Modifiers</h3>
+
+<pre class="prettyprint">
+
+import random
+from morse.core.modifier import Modifier
+
+class IMUNoise(Modifier):
+
+    def register_component(self, name, instance, modifier_data):
+        instance.output_modifiers.append(noisify)
+        self._gyro_std_dev = 0.5
+        self._accel_std_dev = 0.5
+
+    def noisify(self, instance):
+        for i in range(0, 3):
+            instance.local_data['angular_velocity'][i] = \
+                random.gauss(instance.local_data['angular_velocity'][i], 
+                             self._gyro_std_dev)
+
+            instance.local_data['linear_acceleration'][i] = \
+                random.gauss(instance.local_data['linear_acceleration'][i], 
+                             self._accel_std_dev)
+
+</pre>
+</section>
+
+<section>
+    <figure>
+        <video style="left:0px" src="videos/hri.webm"></video> 
+        <figcaption style="color:white">Human-Robot interaction</figcaption>
+    </figure>
+    <details>
+    <ul>
+        <li>Human avatar, that can be controlled from the keyboard or RGB-D skeleton tracker
+        <li>interactive environment, coded with Blender BGE logic bricks
+    </ul>
+    </details>
+</section>
+
+<section>
+    <h3>Multi-node</h3>
+</section>
+
+<section>
+    <figure>
+        <img src="images/swarm-0.svg" alt="Multi-node MORSE" />
+    </figure>
+</section>
+
+<section>
+    <figure>
+        <img src="images/swarm-1.svg" alt="Multi-node MORSE" />
+    </figure>
+</section>
+
+<section>
+    <figure>
+        <img src="images/swarm-2.svg" alt="Multi-node MORSE" />
+    </figure>
+</section>
+
+<section id='end'>
+    <h2>Questions?</h2>
+
+<ul>
+<li>One website: <tt>http://morse.openrobots.org</tt>
+<li>Two mailing-lists: <tt>morse-users@laas.fr</tt> and <tt>morse-dev@laas.fr</tt>
+</ul>
+</section>
+
+
+<!-- Your Style -->
+<!-- Define the style of your presentation -->
+
+<script>
+//$("img#taxonomy").axzoomer({
+//    'maxZoom':4
+//    });
+//$("img#taxonomy").smoothZoom({
+//    width:800,
+//    height:600,
+//    border_SIZE:0});
+</script>
+
+<!-- Maybe a font from http://www.google.com/webfonts ? -->
+<!--<link href='http://fonts.googleapis.com/css?family=Actor' rel='stylesheet'>-->
+
+<link href='parser.css' rel='stylesheet'>
+
+<style>
+    @font-face {
+    font-family: 'Lato';
+    font-style: normal;
+    font-weight: 400;
+    src: url('Lato.ttf');
+    }
+
+  html, .view body { background-color: black; counter-reset: slideidx; }
+  /*For the printout: html, .view body { background-color: white; counter-reset: slideidx; }*/
+  body, .view section { background-color: white; border-radius: 12px }
+  /*For the printout: body, .view section { background-color: white; border:2px solid black;border-radius: 12px;}*/
+  /* A section is a slide. It's size is 800x600, and this will never change */
+  section, .view head > title {
+      /* The font from Google */
+      font-family: 'Lato', arial, serif;
+      font-size: 30px;
+  }
+
+  .view section:after {
+    counter-increment: slideidx;
+    content: counter(slideidx, decimal-leading-zero);
+    position: absolute; bottom: -80px; right: 100px;
+    color: white;
+  }
+
+  .view head > title {
+    color: white;
+    text-align: center;
+    margin: 1em 0 1em 0;
+  }
+
+  h1, h2 {
+    margin-top: 100px;
+    text-align: left;
+    font-size: 40px;
+    margin-left: 40px;
+  }
+  h3 {
+    margin: 50px 0 50px 100px;
+  }
+
+  ul {
+      margin: 50px 150px;
+  }
+  ul ul {
+      margin: 20px 20px;
+      font-size: 0.8em;
+  }
+
+
+  p {
+    margin: 75px;
+    font-size: 50px;
+}
+
+  pre {
+      font-size: 0.5em;
+      margin-left: 10px;
+      padding-left: 5px;
+      border-left: 1px solid;
+  }
+
+  blockquote {
+    height: 100%;
+    background-color: black;
+    color: white;
+    font-size: 60px;
+    padding: 50px;
+  }
+  blockquote:before {
+    content: open-quote;
+  }
+  blockquote:after {
+    content: close-quote;
+  }
+
+  .note {
+      position:absolute;
+      border-radius:5px;
+      border:1px solid;
+      background:rgba(255, 255, 255, 0.9);
+      padding:3px;
+      font-size:10px;
+   }
+  /* Figures are displayed full-page, with the caption
+     on top of the image/video */
+  figure {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+  }
+  figure > * {
+    position: absolute;
+  }
+  figure > img, figure > video {
+    top: 10%; 
+    /* Set up proportionate scaling */
+    width: 100%;
+    height: auto;
+  }
+  figure.vertical > img, figure.vertical > video {
+    left: 10%; 
+    top:0%;
+    /* Set up proportionate scaling */
+    height: 100%;
+    width: auto;
+  }
+  figcaption {
+    margin: 70px;
+    font-size: 30px;
+  }
+  fignote {
+  bottom:0;
+  right:0;
+    margin: 70px;
+    font-size: 16px;
+  }
+
+  reference {
+  bottom:0;
+  right:0;
+    margin: 40px;
+    font-size: 14px;
+  }
+
+
+  footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
+    text-align: right;
+    background-color: #F3F4F8;
+    border-top: 1px solid #CCC;
+  }
+
+
+table {
+        overflow:hidden;
+        border:1px solid #d3d3d3;
+        background:#fefefe;
+        width:70%;
+        margin:5% auto 0;
+        -moz-border-radius:5px; /* FF1+ */
+        -webkit-border-radius:5px; /* Saf3-4 */
+        border-radius:5px;
+    }
+    
+    th, td {padding:3px 5px 3px; text-align:center; }
+    
+    th {padding-top:8px; background:#e8eaeb;}
+    
+
+  /* Transition effect */
+  /* Feel free to change the transition effect for original
+     animations. See here:
+     https://developer.mozilla.org/en/CSS/CSS_transitions
+     How to use CSS3 Transitions: */
+  section {
+    -moz-transition: left 400ms linear 0s;
+    -webkit-transition: left 400ms linear 0s;
+    -ms-transition: left 400ms linear 0s;
+    transition: left 400ms linear 0s;
+  }
+  .view section {
+    -moz-transition: none;
+    -webkit-transition: none;
+    -ms-transition: none;
+    transition: none;
+  }
+
+  .view section[aria-selected] {
+    border: 5px red solid;
+  }
+
+  /* Before */
+  section { left: -150%; }
+  /* Now */
+  section[aria-selected] { left: 0; }
+  /* After */
+  section[aria-selected] ~ section { left: +150%; }
+
+  /* Incremental elements */
+
+  /* By default, visible */
+  .incremental > * { opacity: 0.5; }
+
+  /* The current item */
+  .incremental > *[aria-selected] { opacity: 1; }
+
+  /* The items to-be-selected */
+  .incremental > *[aria-selected] ~ * { opacity: 0; }
+
+  /* The progressbar, at the bottom of the slides, show the global
+     progress of the presentation. */
+  #progress-bar {
+    font-family: 'Actor', arial, serif;
+    height: 25px;
+    /*background: #AAA;*/
+  }
+</style>
+
+<!-- {{{{ dzslides core
+#
+#
+#     __  __  __       .  __   ___  __
+#    |  \  / /__` |    | |  \ |__  /__`
+#    |__/ /_ .__/ |___ | |__/ |___ .__/ core :€
+#
+#
+# The following block of code is not supposed to be edited.
+# But if you want to change the behavior of these slides,
+# feel free to hack it!
+#
+-->
+
+<div id="progress-bar"></div>
+
+<!-- Default Style -->
+<style>
+  * { margin: 0; padding: 0; -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box; }
+  details { display: none; }
+  body {
+    width: 800px; height: 600px;
+    margin-left: -400px; margin-top: -300px;
+    position: absolute; top: 50%; left: 50%;
+    overflow: hidden;
+    display: none;
+  }
+  .view body {
+    position: static;
+    margin: 0; padding: 0;
+    width: 100%; height: 100%;
+    display: inline-block;
+    overflow: visible; overflow-x: hidden;
+    /* undo Dz.onresize */
+    transform: none !important;
+    -moz-transform: none !important;
+    -webkit-transform: none !important;
+    -o-transform: none !important;
+    -ms-transform: none !important;
+  }
+  .view head, .view head > title { display: block }
+  section {
+    position: absolute;
+    pointer-events: none;
+    width: 100%; height: 100%;
+  }
+  .view section {
+    pointer-events: auto;
+    position: static;
+    width: 800px; height: 600px;
+    margin: -150px -200px;
+    float: left;
+
+    transform: scale(.4);
+    -moz-transform: scale(.4);
+    -webkit-transform: scale(.4);
+    -o-transform: scale(.4);
+    -ms-transform: scale(.4);
+  }
+  .view section > * { pointer-events: none; }
+  section[aria-selected] { pointer-events: auto; }
+  html { overflow: hidden; }
+  html.view { overflow: visible; }
+  body.loaded { display: block; }
+  .incremental {visibility: hidden; }
+  .incremental[active] {visibility: visible; }
+  #progress-bar{
+    bottom: 0;
+    position: absolute;
+    width:50px;
+    right: 0;
+    -moz-transition: width 400ms linear 0s;
+    -webkit-transition: width 400ms linear 0s;
+    -ms-transition: width 400ms linear 0s;
+    transition: width 400ms linear 0s;
+  }
+  .view #progress-bar {
+    display: none;
+  }
+</style>
+
+<script>
+  var Dz = {
+    remoteWindows: [],
+    idx: -1,
+    step: 0,
+    html: null,
+    slides: null,
+    progressBar : null,
+    params: {
+      autoplay: "1"
+    }
+  };
+
+  Dz.init = function() {
+    document.body.className = "loaded";
+    this.slides = Array.prototype.slice.call($$$$("body > section"));
+    this.endslide = $$$("#end");
+    this.endidx = this.slides.indexOf(this.endslide);
+    this.progressBar = $$$("#progress-bar");
+    this.html = document.body.parentNode;
+    this.setupParams();
+    this.onhashchange();
+    this.setupTouchEvents();
+    this.onresize();
+    this.setupView();
+  }
+
+  Dz.setupParams = function() {
+    var p = window.location.search.substr(1).split('&');
+    p.forEach(function(e, i, a) {
+      var keyVal = e.split('=');
+      Dz.params[keyVal[0]] = decodeURIComponent(keyVal[1]);
+    });
+  // Specific params handling
+    if (!+this.params.autoplay)
+      $$$$.forEach($$$$("video"), function(v){ v.controls = true });
+  }
+
+  Dz.onkeydown = function(aEvent) {
+    // Don't intercept keyboard shortcuts
+    if (aEvent.altKey
+      || aEvent.ctrlKey
+      || aEvent.metaKey
+      || aEvent.shiftKey) {
+      return;
+    }
+    if ( aEvent.keyCode == 37 // left arrow
+      || aEvent.keyCode == 38 // up arrow
+      || aEvent.keyCode == 33 // page up
+    ) {
+      aEvent.preventDefault();
+      this.back();
+    }
+    if ( aEvent.keyCode == 39 // right arrow
+      || aEvent.keyCode == 40 // down arrow
+      || aEvent.keyCode == 34 // page down
+    ) {
+      aEvent.preventDefault();
+      this.forward();
+    }
+    if (aEvent.keyCode == 35) { // end
+      aEvent.preventDefault();
+      this.goEnd();
+    }
+    if (aEvent.keyCode == 36) { // home
+      aEvent.preventDefault();
+      this.goStart();
+    }
+    if (aEvent.keyCode == 32) { // space
+      aEvent.preventDefault();
+      this.toggleContent();
+    }
+    if (aEvent.keyCode == 70) { // f
+      aEvent.preventDefault();
+      this.goFullscreen();
+    }
+    if (aEvent.keyCode == 79) { // o
+      aEvent.preventDefault();
+      this.toggleView();
+    }
+  }
+
+  /* Touch Events */
+
+  Dz.setupTouchEvents = function() {
+    var orgX, newX;
+    var tracking = false;
+
+    var db = document.body;
+    db.addEventListener("touchstart", start.bind(this), false);
+    db.addEventListener("touchmove", move.bind(this), false);
+
+    function start(aEvent) {
+      aEvent.preventDefault();
+      tracking = true;
+      orgX = aEvent.changedTouches[0].pageX;
+    }
+
+    function move(aEvent) {
+      if (!tracking) return;
+      newX = aEvent.changedTouches[0].pageX;
+      if (orgX - newX > 100) {
+        tracking = false;
+        this.forward();
+      } else {
+        if (orgX - newX < -100) {
+          tracking = false;
+          this.back();
+        }
+      }
+    }
+  }
+
+  Dz.setupView = function() {
+    document.body.addEventListener("click", function ( e ) {
+      if (!Dz.html.classList.contains("view")) return;
+      if (!e.target || e.target.nodeName != "SECTION") return;
+
+      Dz.html.classList.remove("view");
+      Dz.setCursor(Dz.slides.indexOf(e.target) + 1);
+    }, false);
+  }
+
+  /* Adapt the size of the slides to the window */
+
+  Dz.onresize = function() {
+    var db = document.body;
+    var sx = db.clientWidth / window.innerWidth;
+    var sy = db.clientHeight / window.innerHeight;
+    var transform = "scale(" + (1/Math.max(sx, sy)) + ")";
+
+    db.style.MozTransform = transform;
+    db.style.WebkitTransform = transform;
+    db.style.OTransform = transform;
+    db.style.msTransform = transform;
+    db.style.transform = transform;
+  }
+
+
+  Dz.getDetails = function(aIdx) {
+    var s = $$$("section:nth-of-type(" + aIdx + ")");
+    var d = s.$$$("details");
+    return d ? d.innerHTML : "";
+  }
+
+  Dz.onmessage = function(aEvent) {
+    var argv = aEvent.data.split(" "), argc = argv.length;
+    argv.forEach(function(e, i, a) { a[i] = decodeURIComponent(e) });
+    var win = aEvent.source;
+    if (argv[0] === "REGISTER" && argc === 1) {
+      this.remoteWindows.push(win);
+      this.postMsg(win, "REGISTERED", document.title, this.slides.length);
+      this.postMsg(win, "CURSOR", this.idx + "." + this.step);
+      return;
+    }
+    if (argv[0] === "BACK" && argc === 1)
+      this.back();
+    if (argv[0] === "FORWARD" && argc === 1)
+      this.forward();
+    if (argv[0] === "START" && argc === 1)
+      this.goStart();
+    if (argv[0] === "END" && argc === 1)
+      this.goEnd();
+    if (argv[0] === "TOGGLE_CONTENT" && argc === 1)
+      this.toggleContent();
+    if (argv[0] === "SET_CURSOR" && argc === 2)
+      window.location.hash = "#" + argv[1];
+    if (argv[0] === "GET_CURSOR" && argc === 1)
+      this.postMsg(win, "CURSOR", this.idx + "." + this.step);
+    if (argv[0] === "GET_NOTES" && argc === 1)
+      this.postMsg(win, "NOTES", this.getDetails(this.idx));
+  }
+
+  Dz.toggleContent = function() {
+    // If a Video is present in this new slide, play it.
+    // If a Video is present in the previous slide, stop it.
+    var s = $$$("section[aria-selected]");
+    if (s) {
+      var video = s.$$$("video");
+      if (video) {
+        if (video.ended || video.paused) {
+          video.play();
+        } else {
+          video.pause();
+        }
+      }
+    }
+  }
+
+  Dz.setCursor = function(aIdx, aStep) {
+    // If the user change the slide number in the URL bar, jump
+    // to this slide.
+    aStep = (aStep != 0 && typeof aStep !== "undefined") ? "." + aStep : ".0";
+    window.location.hash = "#" + aIdx + aStep;
+  }
+
+  Dz.onhashchange = function() {
+    var cursor = window.location.hash.split("#"),
+        newidx = 1,
+        newstep = 0;
+    if (cursor.length == 2) {
+      newidx = ~~cursor[1].split(".")[0];
+      newstep = ~~cursor[1].split(".")[1];
+      if (newstep > Dz.slides[newidx - 1].$$$$('.incremental > *').length) {
+        newstep = 0;
+        newidx++;
+      }
+    }
+    this.setProgress(newidx, newstep);
+    if (newidx != this.idx) {
+      this.setSlide(newidx);
+    }
+    if (newstep != this.step) {
+      this.setIncremental(newstep);
+    }
+    for (var i = 0; i < this.remoteWindows.length; i++) {
+      this.postMsg(this.remoteWindows[i], "CURSOR", this.idx + "." + this.step);
+    }
+  }
+
+  Dz.back = function() {
+    if (this.idx == 1 && this.step == 0) {
+      return;
+    }
+    if (this.step == 0) {
+      this.setCursor(this.idx - 1,
+                     this.slides[this.idx - 2].$$$$('.incremental > *').length);
+    } else {
+      this.setCursor(this.idx, this.step - 1);
+    }
+  }
+
+  Dz.forward = function() {
+    if (this.idx >= this.slides.length &&
+        this.step >= this.slides[this.idx - 1].$$$$('.incremental > *').length) {
+        return;
+    }
+    if (this.step >= this.slides[this.idx - 1].$$$$('.incremental > *').length) {
+      this.setCursor(this.idx + 1, 0);
+    } else {
+      this.setCursor(this.idx, this.step + 1);
+    }
+  }
+
+  Dz.goStart = function() {
+    this.setCursor(1, 0);
+  }
+
+  Dz.goEnd = function() {
+    var lastIdx = this.slides.length;
+    var lastStep = this.slides[lastIdx - 1].$$$$('.incremental > *').length;
+    this.setCursor(lastIdx, lastStep);
+  }
+
+  Dz.toggleView = function() {
+    this.html.classList.toggle("view");
+
+    if (this.html.classList.contains("view")) {
+      $$$("section[aria-selected]").scrollIntoView(true);
+    }
+  }
+
+  Dz.setSlide = function(aIdx) {
+    this.idx = aIdx;
+    var old = $$$("section[aria-selected]");
+    var next = $$$("section:nth-of-type("+ this.idx +")");
+    if (old) {
+      old.removeAttribute("aria-selected");
+      var videos = old.$$$$("video");
+      for (var i = 0 ; i < videos.length; i++) {
+        videos[i].pause();
+      }
+    }
+    if (next) {
+      next.setAttribute("aria-selected", "true");
+      if (this.html.classList.contains("view")) {
+        next.scrollIntoView();
+      }
+      var videos = next.$$$$("video");
+      for (var i = 0 ; i < videos.length; i++) {
+      
+        if (videos[i] && !!+this.params.autoplay) {
+         videos[i].play();
+        }
+      }
+    } else {
+      // That should not happen
+      this.idx = -1;
+      // console.warn("Slide doesn't exist.");
+    }
+  }
+
+  Dz.setIncremental = function(aStep) {
+    this.step = aStep;
+    var old = this.slides[this.idx - 1].$$$('.incremental > *[aria-selected]');
+    if (old) {
+      old.removeAttribute('aria-selected');
+    }
+    var incrementals = $$$$('.incremental');
+    if (this.step <= 0) {
+      $$$$.forEach(incrementals, function(aNode) {
+        aNode.removeAttribute('active');
+      });
+      return;
+    }
+    var next = this.slides[this.idx - 1].$$$$('.incremental > *')[this.step - 1];
+    if (next) {
+      next.setAttribute('aria-selected', true);
+      next.parentNode.setAttribute('active', true);
+      var found = false;
+      $$$$.forEach(incrementals, function(aNode) {
+        if (aNode != next.parentNode)
+          if (found)
+            aNode.removeAttribute('active');
+          else
+            aNode.setAttribute('active', true);
+        else
+          found = true;
+      });
+    } else {
+      setCursor(this.idx, 0);
+    }
+    return next;
+  }
+
+  Dz.goFullscreen = function() {
+    var html = $$$('html'),
+        requestFullscreen = html.requestFullscreen || html.requestFullScreen || html.mozRequestFullScreen || html.webkitRequestFullScreen;
+    if (requestFullscreen) {
+      requestFullscreen.apply(html);
+    }
+  }
+  
+  Dz.setProgress = function(aIdx, aStep) {
+    var slide = $$$("section:nth-of-type("+ aIdx +")");
+    if (!slide)
+      return;
+    var steps = slide.$$$$('.incremental > *').length + 1,
+        slideSize = 100 / (this.slides.length - 1),
+        stepSize = slideSize / steps;
+        //this.progressBar.style.width = ((aIdx - 1) * slideSize + aStep * stepSize) + '%';
+    if (aIdx == 1) // no numbering on first slide
+        this.progressBar.innerHTML = "";
+    else
+        this.progressBar.innerHTML = (aIdx - 1) + "/" + this.endidx;
+  }
+  
+  Dz.postMsg = function(aWin, aMsg) { // [arg0, [arg1...]]
+    aMsg = [aMsg];
+    for (var i = 2; i < arguments.length; i++)
+      aMsg.push(encodeURIComponent(arguments[i]));
+    aWin.postMessage(aMsg.join(" "), "*");
+  }
+
+  function init() {
+    Dz.init();
+    window.onkeydown = Dz.onkeydown.bind(Dz);
+    window.onresize = Dz.onresize.bind(Dz);
+    window.onhashchange = Dz.onhashchange.bind(Dz);
+    window.onmessage = Dz.onmessage.bind(Dz);
+
+    prettyPrint()
+  }
+
+  window.onload = init;
+</script>
+
+
+<script> // Helpers
+  if (!Function.prototype.bind) {
+    Function.prototype.bind = function (oThis) {
+
+      // closest thing possible to the ECMAScript 5 internal IsCallable
+      // function 
+      if (typeof this !== "function")
+      throw new TypeError(
+        "Function.prototype.bind - what is trying to be fBound is not callable"
+      );
+
+      var aArgs = Array.prototype.slice.call(arguments, 1),
+          fToBind = this,
+          fNOP = function () {},
+          fBound = function () {
+            return fToBind.apply( this instanceof fNOP ? this : oThis || window,
+                   aArgs.concat(Array.prototype.slice.call(arguments)));
+          };
+
+      fNOP.prototype = this.prototype;
+      fBound.prototype = new fNOP();
+
+      return fBound;
+    };
+  }
+
+  var $$$ = (HTMLElement.prototype.$$$ = function(aQuery) {
+    return this.querySelector(aQuery);
+  }).bind(document);
+
+  var $$$$ = (HTMLElement.prototype.$$$$ = function(aQuery) {
+    return this.querySelectorAll(aQuery);
+  }).bind(document);
+
+  $$$$.forEach = function(nodeList, fun) {
+    Array.prototype.forEach.call(nodeList, fun);
+  }
+
+</script>
+<!-- vim: set fdm=marker: }}} -->
+

@@ -1,0 +1,10 @@
+
+- cat_mouse_game.py -> complete MORSE scene for the Cat & Mouse game
+- cat_script.py -> controller for the cat in the Cat & Mouse game
+
+
+- ros-nav-0.py -> initial ROS tutorial scene: just the PR2 with odometry and keyboard
+- ros-nav-1.py + morse_2dnav/nav-1.launch -> same with the pr2_posture sensor + launch file to get the robot full TF tree
+- ros-nav-2.py -> same with a Sick for the mapping
+- ros-nav-2.py + morse_2dnav/nav-2.launch -> launch the map_server
+- ros-nav-3.py + morse_2dnav/nav-3.launch -> full scene, ready for autonomous 2D navigation
