@@ -37,18 +37,17 @@
 from morse.builder import *
 </pre>
 <pre class="prettyprint">
+
 # Our mouse
-mouse = Robot('atrv')
-mouse.name = "MOUSE"
-mouse.translate (x=1.0, z=0.2)
+mouse = ATRV()
+mouse.translate(x=1.0, z=0.2)
 mouse.properties(Object = True, Graspable = False, Label = "MOUSE")
 </pre>
 <pre class="prettyprint">
 
-keyb = Actuator('keyboard')
-keyb.properties(Speed=3.0)
-mouse.append(keyb)
-
+keyboard = Keyboard()
+keyboard.properties(Speed=3.0)
+mouse.append(keyboard)
 </pre>
 </div>
 </section>
@@ -60,25 +59,29 @@ mouse.append(keyb)
 
 <pre class="prettyprint">
 # Our cat
-cat = Robot('atrv')
-cat.name = "CAT"
+cat = ATRV()
 cat.translate(x=-6.0, z=0.2)
-cat.default_interface('socket')
 </pre>
 <pre class="prettyprint">
 
-camera_L = Sensor('semantic_camera')
-camera_L.translate(x=0.2, y=0.3, z=0.9)
-cat.append(camera_L)
+cameraL = SemanticCamera()
+cameraL.translate(x=0.2, y=0.3, z=0.9)
+cat.append(cameraL)
 
-camera_R = Sensor('semantic_camera')
-camera_R.translate(x=0.2, y=-0.3, z=0.9)
-cat.append(camera_R)
+cameraR = SemanticCamera()
+cameraR.translate(x=0.2, y=-0.3, z=0.9)
+cat.append(cameraR)
 </pre>
 <pre class="prettyprint">
 
-V_W = Actuator('v_omega')
-cat.append(V_W)
+motion = MotionVW()
+cat.append(motion)
+</pre>
+<pre class="prettyprint">
+
+motion.add_stream('socket')
+cameraL.add_stream('socket')
+cameraR.add_stream('socket')
 </pre>
 <pre class="prettyprint">
 
@@ -248,16 +251,13 @@ Scroll there to quickly show the available components.
 <h3>What is a component?</h3>
 
 <pre class="prettyprint">
-import morse.core.sensor
+from morse.core.sensor import Sensor
 
-class GPS(morse.core.sensor.Sensor):
+class GPS(Sensor):
 
     add_data('x', 0.0, 'float', 'X position in the world')
     add_data('y', 0.0, 'float', 'Y position in the world')
     add_data('z', 0.0, 'float', 'Z position in the world')
-
-    def __init__(self, obj, parent=None):
-        super(self.__class__,self).__init__(obj, parent)
 
     def default_action(self):
 
@@ -287,15 +287,12 @@ Important stuff:
 
 <pre class="prettyprint">
 from morse.core.services import service
-import morse.core.actuator
+from morse.core.actuator import Acutator
 
-class VWActuator(morse.core.actuator.Actuator):
+class VWActuator(Actuator):
 
     add_data('x', 0.0, 'float', 'linear velocity towards x (m/s)')
     add_data('w', 0.0, 'float', 'angular velocity (rad/s)')
-
-    def __init__(self, obj, parent=None):
-        super(self.__class__, self).__init__(obj, parent)
 
     @service
     def set_speed(self, v, w):
@@ -364,8 +361,8 @@ with pymorse.Morse() as simu:
 <pre class="prettyprint">
     v_w_prev = None
     while True:
-        seen_left = visible(simu.CAT.Camera_L.last())
-        seen_right = visible(simu.CAT.Camera_R.last())
+        seen_left = visible(simu.cat.cameraL.last())
+        seen_right = visible(simu.cat.cameraR.last())
 </pre>
 <pre class="prettyprint">
 
@@ -379,7 +376,7 @@ with pymorse.Morse() as simu:
             v_w = {"v": 0, "w": -1}
 
         if v_w != v_w_prev:
-            simu.CAT.V_W.publish(v_w)
+            simu.cat.motion.publish(v_w)
             v_w_prev = v_w
 </pre>
 </div>

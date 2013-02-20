@@ -1,38 +1,32 @@
 from morse.builder import *
 
-Mouse = Robot('atrv')
-Mouse.name = "MOUSE"
-Mouse.properties(Object = True, Graspable = False, Label = "MOUSE")
-Mouse.translate (x=1.0, z=0.2)
+mouse = ATRV()
+mouse.properties(Object = True, Graspable = False, Label = "MOUSE")
+mouse.translate(x=1.0, z=0.2)
 
-Keyb = Actuator('keyboard')
-Keyb.properties(Speed=3.0)
-Mouse.append(Keyb)
+keyboard = Keyboard()
+keyboard.properties(Speed=3.0)
+mouse.append(keyboard)
 
-Cat = Robot('atrv')
-Cat.name = "CAT"
-Cat.translate(x=-6.0, z=0.2)
+cat = ATRV()
+cat.translate(x=-6.0, z=0.2)
 
-V_W = Actuator('v_omega')
-V_W.name = "V_W"
-Cat.append(V_W)
+motion = MotionVW()
+cat.append(motion)
 
-Semantic_L = Sensor('semantic_camera')
-Semantic_L.translate(x=0.2, y=0.3, z=0.9)
-Semantic_L.name = "Camera_L"
-Cat.append(Semantic_L)
+cameraL = SemanticCamera()
+cameraL.translate(x=0.2, y=0.3, z=0.9)
+cat.append(cameraL)
 
-Semantic_R = Sensor('semantic_camera')
-Semantic_R.translate(x=0.2, y=-0.3, z=0.9)
-Semantic_R.name = "Camera_R"
-Cat.append(Semantic_R)
+cameraR = SemanticCamera()
+cameraR.translate(x=0.2, y=-0.3, z=0.9)
+cat.append(cameraR)
 
-V_W.configure_mw('socket')
-Semantic_L.configure_mw('socket')
-Semantic_R.configure_mw('socket')
-
+motion.add_stream('socket')
+cameraL.add_stream('socket')
+cameraR.add_stream('socket')
 
 env = Environment('land-1/trees')
 env.place_camera([10.0, -10.0, 10.0])
 env.aim_camera([1.0470, 0, 0.7854])
-env.select_display_camera(Semantic_L)
+env.select_display_camera(cameraL)

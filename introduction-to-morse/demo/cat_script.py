@@ -11,11 +11,10 @@ def visible(data):
     return "MOUSE" in objects
 
 with pymorse.Morse() as simu:
-
     v_w_prev = None
     while True:
-        seen_left = visible(simu.CAT.Camera_L.last())
-        seen_right = visible(simu.CAT.Camera_R.last())
+        seen_left  = visible(simu.cat.cameraL.last())
+        seen_right = visible(simu.cat.cameraR.last())
         if seen_left and seen_right:
             v_w = {"v": 2, "w": 0}
         elif seen_left:
@@ -26,6 +25,6 @@ with pymorse.Morse() as simu:
             v_w = {"v": 0, "w": -1}
 
         if v_w != v_w_prev:
-            simu.CAT.V_W.publish(v_w)
+            simu.cat.motion.publish(v_w)
             v_w_prev = v_w
 
