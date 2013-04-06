@@ -8,3 +8,6 @@
 - ros-nav-2.py -> same with a Sick for the mapping
 - ros-nav-2.py + morse_2dnav/nav-2.launch -> launch the map_server
 - ros-nav-3.py + morse_2dnav/nav-3.launch -> full scene, ready for autonomous 2D navigation
+
+- demo_service.py -> example of service usage (search and rescue scenario)
+- demo_service_logic.py -> the robot controller to heal victims
