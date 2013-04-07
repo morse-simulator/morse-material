@@ -11,3 +11,8 @@
 
 - demo_service.py -> example of service usage (search and rescue scenario)
 - demo_service_logic.py -> the robot controller to heal victims
+
+- modifier_ex1.py
+- modifier_logic_ex1.py
+- modifier_ex2.py
+- modifier_logic_ex2.py
