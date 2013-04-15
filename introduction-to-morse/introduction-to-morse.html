@@ -2,19 +2,19 @@
 
 <meta charset="utf-8">
 <title>Introduction to MORSE</title>
-<link href="js/prettify/prettify.css" type="text/css" rel="stylesheet" />
-<script type="text/javascript" src="js/prettify/prettify.js"></script>
+<link href="../media/js/prettify/prettify.css" type="text/css" rel="stylesheet" />
+<script type="text/javascript" src="../media/js/prettify/prettify.js"></script>
 
 <section>
     <h1>An Introduction to MORSE<br/>The Modular OpenRobots Simulation Engine</h1>
     <footer>
-    <img style="float:left; margin:0px;width:auto;height:100px" src="images/morse-logo.png"/>
+    <img style="float:left; margin:0px;width:auto;height:100px" src="../media/images/morse-logo.png"/>
     Séverin Lemaignan <br /> Dec, 20th, 2012</footer>
 </section>
 
 <section>
     <figure>
-        <img src="images/catmouse.jpg" alt="The Cat & Mouse game" />
+        <img src="../media/images/catmouse.jpg" alt="The Cat & Mouse game" />
         <figcaption style="color:white">First demo: Chasing the mouse!</figcaption>
     </figure>
     <details>
@@ -128,10 +128,10 @@ env = Environment('land-1/trees')
 
 <section>
     <figure>
-        <img src="images/blender.jpg" alt="Blender interface" />
+        <img src="../media/images/blender.jpg" alt="Blender interface" />
         <figcaption style="color:white">Blender and Blender Game Engine</figcaption>
-        <video style="position:absolute;top:70px; right:0px;width:260px" src="videos/bge-bathroom.webm"></video>
-        <video style="position:absolute;top:290px; right:0px;width:260px" src="videos/bge-yofrankie.webm"></video>
+        <video style="position:absolute;top:70px; right:0px;width:260px" src="../media/videos/bge-bathroom.webm"></video>
+        <video style="position:absolute;top:290px; right:0px;width:260px" src="../media/videos/bge-yofrankie.webm"></video>
     </figure>
     <details>
         <ul>
@@ -145,7 +145,7 @@ env = Environment('land-1/trees')
 
 <section>
 	<figure>
-        <video style="left:0px" src="videos/bullet.webm"></video> 
+        <video style="left:0px" src="../media/videos/bullet.webm"></video> 
         <figcaption style="color:white"> Bullet physics engine </figcaption>
         <reference>Video by <tt>microcontroled1204</tt> (<a href="http://www.youtube.com/watch?v=3GuQhYfl2EE">YouTube</a>)</reference>
     </figure>
@@ -164,7 +164,7 @@ env = Environment('land-1/trees')
 
 <section>
     <figure>
-        <img src="images/realism-0.svg" alt="Levels of abstraction: level 0" />
+        <img src="../media/images/realism-0.svg" alt="Levels of abstraction: level 0" />
         <figcaption>Levels of abstraction: vision level</figcaption>
     </figure>
     <details>
@@ -174,28 +174,28 @@ env = Environment('land-1/trees')
 
 <section>
     <figure>
-        <img src="images/realism-1.svg" alt="Levels of abstraction: level 1" />
+        <img src="../media/images/realism-1.svg" alt="Levels of abstraction: level 1" />
         <figcaption>Levels of abstraction: depth map level</figcaption>
     </figure>
 </section>
 
 <section>
     <figure>
-        <img src="images/realism-2.svg" alt="Levels of abstraction: level 2" />
+        <img src="../media/images/realism-2.svg" alt="Levels of abstraction: level 2" />
         <figcaption>Levels of abstraction: terrain level</figcaption>
     </figure>
 </section>
 
 <section>
     <figure>
-        <img src="images/realism-3.svg" alt="Levels of abstraction: level 3" />
+        <img src="../media/images/realism-3.svg" alt="Levels of abstraction: level 3" />
         <figcaption>Levels of abstraction: semantic level</figcaption>
     </figure>
 </section>
 
 <section>
     <figure class="vertical">
-        <img src="images/sail.svg" alt="SAIL architecture" />
+        <img src="../media/images/sail.svg" alt="SAIL architecture" />
         <figcaption>SAIL: <em>Software Architecture In the Loop</em></figcaption>
     </figure>
     <details>
@@ -208,7 +208,7 @@ env = Environment('land-1/trees')
 
 <section>
     <figure class="vertical">
-        <img src="images/main_loop.svg" alt="MORSE main loop" />
+        <img src="../media/images/main_loop.svg" alt="MORSE main loop" />
         <!--<figcaption>The MORSE main loop</figcaption>-->
     </figure>
     <details>
@@ -236,7 +236,7 @@ env = Environment('land-1/trees')
 <section>
     <a href="http://www.openrobots.org/morse/doc/latest/components_library.html">
     <figure>
-        <img src="images/components.jpg" alt="Available robotic bases" />
+        <img src="../media/images/components.jpg" alt="Available robotic bases" />
     </figure>
     </a>
 
@@ -397,8 +397,8 @@ Important stuff:
         <li>Generic: <em>sockets</em>, <em>text</em>,
         <li>Specific to robotics: <em>middlewares</em>
             <ul>
-            <li><img style="height: 21px; margin-bottom: -5px;" src="images/logo-ros.png" />
-            <li><img style="height: 21px; margin-bottom: -5px;" src="images/logo-yarp.png" />
+            <li><img style="height: 21px; margin-bottom: -5px;" src="../media/images/logo-ros.png" />
+            <li><img style="height: 21px; margin-bottom: -5px;" src="../media/images/logo-yarp.png" />
             <li>GenoM/pocolibs
             <li>MOOS
             </ul>
@@ -415,14 +415,14 @@ Important stuff:
         <li>Practically, many cases are automated (eg, JSON on sockets)
         <li>Specific marshalling functions can be provided to MORSE.
     </ul>
-        <a href="http://www.openrobots.org/morse/doc/latest/user/integration.html"><img style="margin-left:120px;margin-top:-30px;width:70%" src="images/middleware-support.jpg" alt="Glimpse on the middleware support matrix" /></a>
+        <a href="http://www.openrobots.org/morse/doc/latest/user/integration.html"><img style="margin-left:120px;margin-top:-30px;width:70%" src="../media/images/middleware-support.jpg" alt="Glimpse on the middleware support matrix" /></a>
 </div>
 </section>
 
 
 <section>
     <h2 style="margin-top:50px">Real-world use-case:<br/>ROS navigation tutorial</h2>
-        <img style="top:100px;width:100%" src="images/ros_nav.png" alt="ROS navigation demonstration" />
+        <img style="top:100px;width:100%" src="../media/images/ros_nav.png" alt="ROS navigation demonstration" />
     <details>
     We start the presentation with a concrete example: the 'Cat and Mouse' game <br/>
     Do the full demo, but without too many explantions (for now):
@@ -486,7 +486,7 @@ class IMUNoise(Modifier):
 
 <section>
     <figure>
-        <video style="left:0px" src="videos/hri.webm"></video> 
+        <video style="left:0px" src="../media/videos/hri.webm"></video> 
         <figcaption style="color:white">Human-Robot interaction</figcaption>
     </figure>
     <details>
@@ -503,19 +503,19 @@ class IMUNoise(Modifier):
 
 <section>
     <figure>
-        <img src="images/swarm-0.svg" alt="Multi-node MORSE" />
+        <img src="../media/images/swarm-0.svg" alt="Multi-node MORSE" />
     </figure>
 </section>
 
 <section>
     <figure>
-        <img src="images/swarm-1.svg" alt="Multi-node MORSE" />
+        <img src="../media/images/swarm-1.svg" alt="Multi-node MORSE" />
     </figure>
 </section>
 
 <section>
     <figure>
-        <img src="images/swarm-2.svg" alt="Multi-node MORSE" />
+        <img src="../media/images/swarm-2.svg" alt="Multi-node MORSE" />
     </figure>
 </section>
 
