@@ -50,6 +50,7 @@
       <li>100% open-source, permissive BSD-like license
       <li>Release 1.0 in Feb. 2013
       <li>~30K LOC, mostly Python
+      <li><tt><small>apt-get install morse-simulator</small></tt>
     </ul>
 </section>
 
@@ -107,6 +108,8 @@
 $ morse create strands_sim
 </pre>
 </h2>
+
+<reference><em>This example requires latest <tt>git</tt> version of MORSE</em></reference>
 </section>
 
 
@@ -126,9 +129,8 @@ $ vim strands_sim/defaults.py
 from random import uniform
 from morse.builder import *
 
-robot = PR2()
-robot.translate(x=5.0, y=5.0)
-robot.add_interface('ros') # control PR2 via ROS
+robot = BasePR2() # Bare PR2 model
+robot.add_default_interface('ros') # control PR2 via ROS
 
 for i in range(50):
 
@@ -137,7 +139,6 @@ for i in range(50):
 
     waypoint = Waypoint() # create actuator
     waypoint.add_interface('socket') # control via sockets
-
     human.append(waypoint)
 
 env = Environment("office.blend") # load custom 3d model
@@ -145,11 +146,6 @@ env = Environment("office.blend") # load custom 3d model
 </pre>
 
 </div>
-
-<details>
-THIS DOES NOT WORK with current MORSE! Minor issues with multiple humans
-</details>
-
 
 
 </section>
@@ -162,6 +158,8 @@ $ morse run strands_sim
 </h2>
 <div class="incremental">
 <img style="width:100%" src="../media/images/30humans.png"></video>
+<div style="font-size:30pt;position:absolute;top:200px;left:30px">You'll need an nvidia/AMD graphic adapter!</div>
+
 </div>
 </section>
 
@@ -174,22 +172,18 @@ $ morse run strands_sim
 <br/>
 <pre class="prettyprint">
 
-import pymorse
+import pymorse  # ->  apt-get install python3-morse-simulator
 
 with pymorse.Morse('localhost') as simu:
 
-    for human in simu.humans:
-        human.goto(uniform(-5, 5), uniform(-5, 5))
+    simu.human_001.goto(uniform(-5, 5), uniform(-5, 5))
+    # ...
 </pre>
 
 <br />
 <br />
 <br />
 <reference><a href="http://www.openrobots.org/morse/doc/latest/user/actuators/waypoint.html"><tt>Waypoint</tt> documentation</a></reference>
-<details>
-THIS DOES NOT WORK with current MORSE! we can not directly access the list
-of humans like that.
-</details>
 
 </section>
 
@@ -226,7 +220,7 @@ Scroll there to quickly show the available components.
         <li>2 interactions modalities: <b>datastreams</b> and <b>services</b>,
         <li>datastreams: <b>published</b> by MORSE for sensors, <b>read</b> for actuators,
         <li><b>strong decoupling</b>: components are <b>not aware</b> of surrounding interfaces/modifiers,
-        <li>modifiers alter the sensors/actuators data, typically to add noise,
+        <li><b>modifiers</b> alter the sensors/actuators data, typically to add noise,
         <li>components' <i>local data</i> are exported/imported by <b>external interfaces</b> like sockets,
         <li>services: RPC-style interaction, can be <b>synchronous</b> or <b>asynchronous</b>
     </ul>
@@ -242,7 +236,7 @@ Scroll there to quickly show the available components.
             <li>GenoM/pocolibs
             <li>MOOS
             </ul>
-        <li>Again, two main interaction types: <em>RPC-oriented</em> or <em>datastream-oriented</em>
+        <li>Mapping to interaction semantics: <em>RPC-oriented</em> or <em>datastream-oriented</em>
         <li>Language <em>bindings</em> available for Python. Easy to develop for other languages through the socket interface.
         <li>Simulation <b>introspection</b> possible through sockets interface
     </ul>
@@ -456,8 +450,9 @@ Scroll there to quickly show the available components.
   reference {
   bottom:0;
   right:0;
-    margin: 40px;
-    font-size: 14px;
+  margin: 40px;
+  font-size: 14px;
+  position:absolute;
   }
 
 
