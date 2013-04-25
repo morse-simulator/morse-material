@@ -87,7 +87,11 @@
 	</ul>
 	<details>
 		<ul>
-			<li>High-level sensors: If you don't want to deal with navigation, use waypoint actuator, if you want to skip perception, use semantic camera</li>
+			<li>ROS users know Gazebo, which does a good job but there are also good reasons to take a look at MORSE!</li>
+			<li>Explain why I use MORSE: Human component, High-level sensors make it easy to test high-level resoning 
+			algorithms whithout dealing too much with low-level components (perception etc.)</li>
+			<li>High-level sensors: If you don't want to deal with navigation, use waypoint actuator, if you want to skip perception, 
+			use semantic camera</li>
 		</ul>
 	</details>
 </section>
@@ -116,6 +120,12 @@
 <h2>What if...</h2>
 <h2>...we want to simulate a PR2 mapping a kitchen environment?</h2>
 </div>
+	<details>
+		<ul>
+			<li>To show how easy it is to set up a scenario to perform 2D Mapping with standard ROS components, I want to demonstrate
+			a bit the MORSE workflow by giving you an example of the steps you have to take on the MORSE side...</li>
+		</ul>
+	</details>
 </section>
 
 <section>
@@ -124,10 +134,13 @@
 $ morse create pr2_kitchen
 </pre>
 </h2>
-
 <reference><em>This example requires latest <tt>git</tt> version of MORSE</em></reference>
+	<details>
+		<ul>
+			<li>First choose a name for your scenario and create it. MORSE takes care about the rest and creates the needed files and folders...</li>
+		</ul>
+	</details>
 </section>
-
 
 
 <section>
@@ -147,11 +160,11 @@ from morse.builder import *
 robot = BasePR2() # Bare PR2 model
 robot.add_default_interface('ros') # control PR2 via ROS
 
-odometry = Odometry()
+odometry = Odometry() # Sensor for Odometry information
 odometry.add_interface('ros', topic="/odom")
 robot.append(odometry)
 
-keyboard = Keyboard()
+keyboard = Keyboard() # Keyboard control
 keyboard.name = 'keyboard_control'
 robot.append(keyboard)
 
@@ -169,7 +182,7 @@ $ vim pr2_kitchen/defaults.py
 <pre class="prettyprint">
 	
 [...]
-scan = Hokuyo()
+scan = Hokuyo() # Hokuyo 2D laser scanner
 scan.translate(x=0.275, z=0.252)
 scan.create_laser_arc()
 scan.add_interface('ros', topic='/scan')
@@ -189,24 +202,7 @@ $ morse run pr2_kitchen
 	<video muted style="position:absolute;top:150px; left:0px; width: 100%;" src="../media/videos/pr2_mapping.webm"></video> 
 <!--img style="width:100%" src="../media/images/pr2_mapping.png"-->
 </div>
-</section>
-
-
-<section>
-<h2>Navigation using move_base</h2>
-<br/>
-<br/>
-<pre class="prettyprint">
-[...]	
-motion = MotionXYW()
-james.append(motion)
-motion.add_interface('ros', topic='/cmd_vel')
-[...]
-</pre>
-<br />
-<br />
-<br />
-<reference><a href="http://www.openrobots.org/morse/doc/latest/user/actuators/waypoint.html"><tt>Waypoint</tt> documentation</a></reference>
+<reference><em>Using standard ROS <tt>robot_state_publisher</tt> and <tt>gmapping</tt></em></reference>
 </section>
 
 <section>
@@ -216,7 +212,36 @@ $ morse run pr2_kitchen
 </pre>
 </h2>
 <div class="incremental">
-<img style="width:100%" src="../media/images/ros_nav.png">
+	<video muted style="position:absolute;top:150px; left:0px; width: 100%;" src="../media/videos/pr2_amcl_wide.webm#t=10"></video> 
+<!--img style="width:100%" src="../media/images/pr2_mapping.png"-->
+</div>
+<reference><em>Using standard ROS <tt>amcl</tt> localization</em></reference>
+</section>
+
+<section>
+<h2>Navigation using move_base and AMCL localization</h2>
+<br/>
+<br/>
+<pre class="prettyprint">
+[...]	
+motion = MotionXYW() # Motion controller
+motion.add_interface('ros', topic='/cmd_vel')
+robot.append(motion)
+[...]
+</pre>
+<br />
+<br />
+<br />
+</section>
+
+<section>
+<h2>
+<pre>
+$ morse run pr2_kitchen
+</pre>
+</h2>
+<div class="incremental">
+<video muted style="position:absolute;top:150px; left:0px; width: 100%;" src="../media/videos/pr2_move_base_wide.webm#t=3"></video> 
 </div>
 </section>
 
@@ -317,19 +342,14 @@ Scroll there to quickly show the available components.
 </section>
 
 <section>
-    <figure>
-        <img src="../media/images/swarm-2.svg" alt="Multi-node MORSE" />
-    </figure>
-</section>
-
-<section>
     <h2>Still missing...</h2>
 
     <ul class='incremental'>
-        <li>Faster-than-realtime simulation
-        <li>Explicit <em>timeline of events</em>
-        <li>Formal support for logging/replay
-        <li>...(you name it!)
+        <li>Faster-than-realtime simulation</li>
+        <li>Explicit <em>timeline of events</em></li>
+        <li>Formal support for logging/replay</li>
+        <li>Full support of PR2</li>
+        <li>...(you name it!)</li>
     </ul>
 </section>
 <section id='end'>
