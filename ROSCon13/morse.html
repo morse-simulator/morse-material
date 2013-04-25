@@ -20,6 +20,11 @@
     <ul>
         <li>MORSE video for the 1.0 release, in Feb. 2013
         <li>Lasts 1'42"
+        <li>Shows you some features and application of MORSE which is based on the open-source projects BLender, Bullet and Python</li>
+        <li>MORSE meanwhile includes a collection of several robot platforms and many sensors and actuators...</li>
+        <li>... and suports different middlewares like ...</li>
+        <li>It has a human avator which you can control like in 3D computer games for HRI</li>
+        <li>...</li>
     </ul>
     </details>
 </section>
@@ -87,11 +92,12 @@
 	</ul>
 	<details>
 		<ul>
-			<li>ROS users know Gazebo, which does a good job but there are also good reasons to take a look at MORSE!</li>
+			<li>ROS users know Gazebo, and while Gazebo is a great simulator, there are also good reasons to take a closer look at MORSE!</li>
 			<li>Explain why I use MORSE: Human component, High-level sensors make it easy to test high-level resoning 
 			algorithms whithout dealing too much with low-level components (perception etc.)</li>
 			<li>High-level sensors: If you don't want to deal with navigation, use waypoint actuator, if you want to skip perception, 
 			use semantic camera</li>
+			<li>+ other avantages</li>
 		</ul>
 	</details>
 </section>
@@ -116,8 +122,8 @@
 </section>
 
 <section>
-<div class="incremental">
 <h2>What if...</h2>
+<div class="incremental">
 <h2>...we want to simulate a PR2 mapping a kitchen environment?</h2>
 </div>
 	<details>
@@ -141,7 +147,6 @@ $ morse create pr2_kitchen
 		</ul>
 	</details>
 </section>
-
 
 <section>
 <h2>
@@ -280,7 +285,7 @@ Scroll there to quickly show the available components.
         <li>datastreams: <b>published</b> by MORSE for sensors, <b>read</b> for actuators,
         <li><b>strong decoupling</b>: components are <b>not aware</b> of surrounding interfaces/modifiers,
         <li><b>modifiers</b> alter the sensors/actuators data, typically to add noise,
-        <li>components' <i>local data</i> are exported/imported by <b>external interfaces</b> like sockets,
+        <li>components' <i>local data</i> are exported/imported by <b>external interfaces</b> like sockets or ROS
         <li>services: RPC-style interaction, can be <b>synchronous</b> or <b>asynchronous</b>
     </ul>
 </section>
