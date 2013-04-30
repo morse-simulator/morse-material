@@ -159,7 +159,6 @@ $ vim pr2_kitchen/defaults.py
 
 
 <pre class="prettyprint">
-from random import uniform
 from morse.builder import *
 
 robot = BasePR2() # Bare PR2 model
@@ -170,7 +169,6 @@ odometry.add_interface('ros', topic="/odom")
 robot.append(odometry)
 
 keyboard = Keyboard() # Keyboard control
-keyboard.name = 'keyboard_control'
 robot.append(keyboard)
 
 [...]
@@ -189,7 +187,6 @@ $ vim pr2_kitchen/defaults.py
 [...]
 scan = Hokuyo() # Hokuyo 2D laser scanner
 scan.translate(x=0.275, z=0.252)
-scan.create_laser_arc()
 scan.add_interface('ros', topic='/scan')
 robot.append(scan)
 
