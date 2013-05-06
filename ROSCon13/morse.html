@@ -20,7 +20,7 @@
     <ul>
         <li>MORSE video for the 1.0 release, in Feb. 2013
         <li>Lasts 1'42"
-        <li>Shows you some features and application of MORSE which is based on the open-source projects BLender, Bullet and Python</li>
+        <li>Shows you some features and application of MORSE which is based on the open-source projects Blender, Bullet and Python</li>
         <li>MORSE meanwhile includes a collection of several robot platforms and many sensors and actuators...</li>
         <li>... and suports different middlewares like ...</li>
         <li>It has a human avator which you can control like in 3D computer games for HRI</li>
@@ -171,27 +171,14 @@ robot.append(odometry)
 keyboard = Keyboard() # Keyboard control
 robot.append(keyboard)
 
-[...]
-</pre>
-</div>
-</section>
-
-<section>	
-<h2>
-<pre>
-$ vim pr2_kitchen/defaults.py
-</pre>
-</h2>
-<pre class="prettyprint">
-	
-[...]
 scan = Hokuyo() # Hokuyo 2D laser scanner
 scan.translate(x=0.275, z=0.252)
 scan.add_interface('ros', topic='/scan')
 robot.append(scan)
 
 env = Environment("kitchen.blend") # load custom 3d model
-<pre/>
+</pre>
+</div>
 </section>
 
 <section>
