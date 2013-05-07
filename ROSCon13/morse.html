@@ -9,7 +9,7 @@
     <h1>MORSE<br/>...in 20min</h1>
     <footer>
     <img style="float:left; margin:0px;width:auto;height:100px" src="../media/images/morse-logo.png"/>
-    Michael Karg, Pierick Koch<br /> May 2013</footer>
+    Michael Karg, Pierrick Koch<br /> May 2013</footer>
 </section>
 
 <section>
@@ -18,8 +18,8 @@
     </figure>
     <details>
     <ul>
-        <li>MORSE video for the 1.0 release, in Feb. 2013
-        <li>Lasts 1'42"
+        <li>MORSE video for the 1.0 release, in Feb. 2013</li>
+        <li>Lasts 1'42"</li>
         <li>Shows you some features and application of MORSE which is based on the open-source projects Blender, Bullet and Python</li>
         <li>MORSE meanwhile includes a collection of several robot platforms and many sensors and actuators...</li>
         <li>... and suports different middlewares like ...</li>
@@ -43,9 +43,16 @@
             <li>Serialization/Deserialization
         </ul>
       <li>Human-Robot Interaction
-      <li>Massive simulations
+      <li>Distributed simulations
       <li>Still missing...
     </ul>
+     <details>
+		<ul>
+        <li>Structure of the talk as follows:</li>
+        <li>First generally introduce the MORSE project and give a little example of it use, </li>
+        <li>... then Pierrick will show you some more details and talk about HRI and distributed simulations.</li>
+		</ul>
+    </details>
 </section>
 
 
@@ -67,6 +74,13 @@
       <li>As of Apr. 2013, contributions by 12 institutions worldwide
       <img style="width:100%" src="../media/logos/contributors.svg"/>
     </ul>
+    
+    <details>
+		<ul>
+        <li>MORSE evolved out of academics and was started in 2009 by LAAS CNRS in Toulouse...</li>
+        <li>... and as for now includes ... </li>
+		</ul>
+    </details>
 </section>
 
 <section>
@@ -77,6 +91,25 @@
       <li>> 130 users on <tt>morse-users</tt>
       <li> ... + the Blender and Bullet communities!
     </ul>
+</section>
+
+<section>
+    <h2>Blender Game Engine + Bullet</h2>
+
+        <video style="position:absolute;top:150px; left:50px;width:260px" src="../media/videos/bge-bathroom.webm"></video>
+        <video style="position:absolute;top:150px; right:50px;width:260px" src="../media/videos/bge-yofrankie.webm"></video>
+        <video style="position:absolute;top:380px; right:250px;width:300px" src="../media/videos/bullet.webm"></video>
+    <details>
+        <ul>
+            <li> primary a 3D modeller
+            <li> provide a 3D game engine, support shaders
+            <li> Switch from the modeller to the simulation == press 'P'
+            <li> BGE: written in C++, extensible in Python + logic bricks
+            <li>Bullet is integrated to the BGE, state-of-the art open-source library
+            <li>support for rigid bodies and soft bodies simulation
+            <li>limited support for dynamics (Vehicle class)
+    </ul>
+    </details>
 </section>
 
 <section>
@@ -102,24 +135,6 @@
 	</details>
 </section>
 
-<section>
-    <h2>Blender Game Engine + Bullet</h2>
-
-        <video style="position:absolute;top:150px; left:50px;width:260px" src="../media/videos/bge-bathroom.webm"></video>
-        <video style="position:absolute;top:150px; right:50px;width:260px" src="../media/videos/bge-yofrankie.webm"></video>
-        <video style="position:absolute;top:380px; right:250px;width:300px" src="../media/videos/bullet.webm"></video>
-    <details>
-        <ul>
-            <li> primary a 3D modeller
-            <li> provide a 3D game engine, support shaders
-            <li> Switch from the modeller to the simulation == press 'P'
-            <li> BGE: written in C++, extensible in Python + logic bricks
-            <li>Bullet is integrated to the BGE, state-of-the art open-source library
-            <li>support for rigid bodies and soft bodies simulation
-            <li>limited support for dynamics (Vehicle class)
-    </ul>
-    </details>
-</section>
 
 <section>
 <h2>What if...</h2>
@@ -179,6 +194,14 @@ robot.append(scan)
 env = Environment("kitchen.blend") # load custom 3d model
 </pre>
 </div>
+	<details>
+		<ul>
+			<li>In the auomatically generated defaults.py file, we can define our simulation scenrário...</li>
+			<li>In the first 2 lines: PR2 + ROS</li>
+			<li>Odemetry sensor + keyboard control (mention PR2_keyboard_teleop)</li>
+			<li>Custom 3 model of the env (in this case blender, but 3D Studio etc. also possbile via Blender import)</li>
+		</ul>
+	</details>
 </section>
 
 <section>
@@ -205,6 +228,11 @@ $ morse run pr2_kitchen
 <!--img style="width:100%" src="../media/images/pr2_mapping.png"-->
 </div>
 <reference><em>Using standard ROS <tt>amcl</tt> localization</em></reference>
+<details>
+		<ul>
+			<li>Having built the map, we can also use AMCL for localization...</li>
+		</ul>
+	</details>
 </section>
 
 <section>
