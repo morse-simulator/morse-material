@@ -265,7 +265,7 @@ $ morse run pr2_kitchen
 <ul class="incremental">
     <li>MORSE simulations are made of <i>components</i>
 <li>Base components are <b>sensors</b>, <b>actuators</b> or <b>robots</b>,
-<li>Other components are <b>interfaces</b>, <b>modifiers</b> and <b>overlays</b>
+<li>Other elements are <b>interfaces</b>, <b>modifiers</b> and <b>overlays</b>
 <li>They are defined by a mandatory Python description,
 <li>They optionally come with a (Blender) 3D mesh.
 </ul>
@@ -298,7 +298,11 @@ Scroll there to quickly show the available components.
         <li>components' <i>local data</i> are exported/imported by <b>external interfaces</b> like sockets or ROS
         <li>services: RPC-style interaction, can be <b>synchronous</b> or <b>asynchronous</b>
     </ul>
+<details>
+- <a href="../media/images/main_loop.svg">main_loop.svg</a>
+</details>
 </section>
+
 <section>
     <h3>MORSE Principles: Interfaces</h3>
     <ul class="incremental" style="font-size:0.8em">
@@ -315,7 +319,15 @@ Scroll there to quickly show the available components.
         <li>Language <em>bindings</em> available for Python. Easy to develop for other languages through the socket interface.
         <li>Simulation <b>introspection</b> possible through sockets interface
     </ul>
-
+<details>
+<ul>
+    <li>ROS: well, you know... // YARP: Yet Another Robot Platform
+    <li>GenoM/pocolibs: Generator of Modules and its communication layer, developed at LAAS
+    <li>OpenRTM: Open source Robotic Technology Middleware, developed by Japan's National Institute of Advanced Industrial Science and Technology
+    <li>MOOS: Mission Oriented Software Suite, developed at Oxford University
+    <li>MORSE is middleware independant ! (bindings are modules)
+</ul>
+</details>
 </section>
 
 <section>
