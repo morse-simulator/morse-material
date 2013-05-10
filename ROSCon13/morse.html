@@ -348,6 +348,8 @@ Scroll there to quickly show the available components.
     <details>
     <ul>
         <li>Human avatar, that can be controlled from the keyboard or RGB-D skeleton tracker
+        <li>Simulated object recognition using MORSE "semantic camera" and ROS TF
+        <li>Visibility of objects given by the semantic cameras (human block the view)
         <li>interactive environment, coded with Blender BGE logic bricks
     </ul>
     </details>
@@ -356,18 +358,37 @@ Scroll there to quickly show the available components.
 <section>
     <h3>Multi-node</h3>
     <video muted style="left:0px;width:800px" src="../media/videos/morse_multi.webm#t=3"></video>
+<details>
+<ul>
+    <li>Two MORSE instance running and a "multinode-server"
+    <li>Each robot is controlled by a node
+    <li>Tested with 10 nodes (needs to work on sync : WIP)
+</ul>
+</details>
 </section>
 
 <section>
     <figure>
         <img src="../media/images/swarm-0.svg" alt="Multi-node MORSE" />
     </figure>
+<details>
+<ul>
+    <li>Use in a multi-robots scenario (air-ground cooperation)
+    <li>Segway RMP400 on first node and Yamaha RMAX on the second
+    <li>So... This is what is working today...
+</ul>
+</details>
 </section>
 
 <section>
     <figure>
         <img src="../media/images/swarm-1.svg" alt="Multi-node MORSE" />
     </figure>
+<details>
+<ul>
+    <li>And that's what we want to do next! :)
+</ul>
+</details>
 </section>
 
 <section>
