@@ -100,6 +100,104 @@
 </section>
 
 <section>
+    <h3>Technical Session</h3>
+    <h4>Discrete Event System</h4>
+
+    <ul>
+        <li>Today, we can play with callbacks in <tt>pymorse</tt>...
+        <li>API 'Hands of God' to introspect the simulation
+            <ul>
+                <li>First proposal by Lars and Co
+                <li>Optimal design?
+                <li>How deep/complete?
+            </ul>
+        <li>Within MORSE? in a client (ie, <tt>pymorse</tt>)?
+        <li>Event-based? State machine? What does already exist?
+        <li>What is a nice user interface?
+    </ul>
+    <footer>
+    <a href="#2.0"><img style="float:left; margin:10px;width:auto;height:100px" src="../media/images/morse-logo.png"/></a>
+    MORSE Intl. Workshop<br /> 6-7 June 2013</footer>
+</section>
+
+
+<section>
+    <h3>Technical Session</h3>
+    <h4>Discrete Event System (2)</h4>
+<pre class="prettyprint">
+from pymorse import events
+
+def move_human(): pass
+
+def destroy_table(): pass
+
+events.at(120).do(move_human)
+events.on(lambda sim: 
+            events.isnear(sim.human, sim.table)
+         ).do(destroy_table)
+</pre>
+
+<span style="font-size:20px">Something else: <a href="http://www.ros.org/wiki/smach/Tutorials/Getting%20Started#Example">SMACH example</a></span>
+    <footer>
+    <a href="#2.0"><img style="float:left; margin:10px;width:auto;height:100px" src="../media/images/morse-logo.png"/></a>
+    MORSE Intl. Workshop<br /> 6-7 June 2013</footer>
+</section>
+
+
+<section>
+    <h3>Technical Session</h3>
+    <h4>Faster-than-realtime Simulation</h4>
+
+    <ul>
+        <li><pre class="prettyprint">bpymorse.set_speed(fps=0, logic_step_max=0, physics_step_max=0)</pre>
+        <li>Bullet <tt>btDynamicsWorld::stepSimulation</tt> <a href=http://www.bulletphysics.org/mediawiki-1.5.8/index.php?title=Stepping_The_World#Any_other_important_things_to_know.3F">documentation</a>
+    </ul>
+    <footer>
+    <a href="#2.0"><img style="float:left; margin:10px;width:auto;height:100px" src="../media/images/morse-logo.png"/></a>
+    MORSE Intl. Workshop<br /> 6-7 June 2013</footer>
+</section>
+
+
+<section>
+    <h3>Technical Session</h3>
+    <h4>Faster-than-realtime Simulation (2)</h4>
+
+    Comments from Charles:
+    <ul>
+        <li>Today, speed in MORSE is not <tt>1 m/s</tt> but <tt>1m/60 ticks</tt>
+        <li>For sensors: <tt>10Hz</tt> is indeed <tt>10 * 60 ticks</tt>
+        <li>2 modes?
+            <ul>
+                <li><em>best effort</em>: 'hard' realtime
+                <li><em>simulated time</em>: current solution
+            </ul>
+    </ul>
+    <footer>
+    <a href="#2.0"><img style="float:left; margin:10px;width:auto;height:100px" src="../media/images/morse-logo.png"/></a>
+    MORSE Intl. Workshop<br /> 6-7 June 2013</footer>
+</section>
+
+<section>
+    <h3>Technical Session</h3>
+    <h4>Humans in MORSE</h4>
+
+    <footer>
+    <a href="#2.0"><img style="float:left; margin:10px;width:auto;height:100px" src="../media/images/morse-logo.png"/></a>
+    MORSE Intl. Workshop<br /> 6-7 June 2013</footer>
+</section>
+
+
+<section>
+    <h3>Presentations</h3>
+    <h4>The STRANDS project - Lars Kunze</h4>
+
+    <footer>
+    <a href="#2.0"><img style="float:left; margin:10px;width:auto;height:100px" src="../media/images/morse-logo.png"/></a>
+    MORSE Intl. Workshop<br /> 6-7 June 2013</footer>
+</section>
+
+
+<section>
     <h1>Creating a novel robot</h1>
     <h2>Tutorial - A Journey to a New Simulation</h2>
 <div class="incremental">
@@ -139,16 +237,72 @@ robot = Walle()
     <ul>
 </section>
 
+<section>
+    <h3>Presentations</h3>
+    <h4>State Machine Based Testing - Florian Lier</h4>
+
+    <footer>
+    <a href="#2.0"><img style="float:left; margin:10px;width:auto;height:100px" src="../media/images/morse-logo.png"/></a>
+    MORSE Intl. Workshop<br /> 6-7 June 2013</footer>
+</section>
+
+
+
+<section>
+    <h3>Technical Session</h3>
+    <h4>Humanoid Robots, Armatures and URDF</h4>
+
+    <ul>
+        <li>Olivier's talk
+        <li>Creation of armatures in Blender
+        <li>Armatures in MORSE: what's next?
+        <li>URDF/SRDF support?
+    </ul>
+
+    <footer>
+    <a href="#2.0"><img style="float:left; margin:10px;width:auto;height:100px" src="../media/images/morse-logo.png"/></a>
+    MORSE Intl. Workshop<br /> 6-7 June 2013</footer>
+</section>
+
+
+<section>
+    <h3>Tutorial</h3>
+    <h4>Challenge "Advanced Component"</h4>
+
+    <img style="position:absolute;top:50px; margin:10px;width:auto;height:150px" src="leds.gif"/>
+    <ul>
+        <li>Make teams of 2 or 3
+        <li>Develop a <tt>RGB LEDs Array</tt> (10X10) actuator from scratch
+        <li>Support sockets (bonus for <tt>pymorse</tt> or at least another middleware)
+        <li>Bonus for a modifier to adapt to non-RGB LEDs
+    </ul>
+
+    <span style="font-size:20px;margin:10px;">Do not hesistate to complete <tt>a_journey_to_a_new_simulation.rst</tt>!</span>
+
+    <footer>
+    <a href="#2.0"><img style="float:left; margin:10px;width:auto;height:100px" src="../media/images/morse-logo.png"/></a>
+    MORSE Intl. Workshop<br /> 6-7 June 2013</footer>
+</section>
+
+
+<section>
+    <h3>Technical Session</h3>
+    <h4>Best practises for code organization</h4>
+
+    <ul>
+        <li>MORSE cmd line
+    </ul>
+
+    <footer>
+    <a href="#2.0"><img style="float:left; margin:10px;width:auto;height:100px" src="../media/images/morse-logo.png"/></a>
+    MORSE Intl. Workshop<br /> 6-7 June 2013</footer>
+</section>
+
+
+
 
 <section id='end'>
-    <h1>Questions?</h1>
-
-<ul>
-    <li>One website: <tt><nobr><a href="http://morse.openrobots.org">morse.openrobots.org</a></nobr></tt>
-    <li>Two mailing-lists: <tt><nobr>morse-users@laas.fr</nobr></tt> and
-    <tt><nobr>morse-dev@laas.fr</nobr></tt><br/>
-    <a href="https://sympa.laas.fr/sympa/subscribe/morse-users">subscribe on sympa.laas.fr</a>
-</ul>
+    <h1>See you next year!</h1>
 </section>
 
 
@@ -217,11 +371,23 @@ robot = Walle()
     font-weight: lighter;
   }
   h3 {
-    margin: 50px 0 50px 100px;
+    margin-top: 50px;
+    text-align: right;
+    font-size: 30px;
+    margin-right: 40px;
+  }
+  h4 {
+    margin-top: 30px;
+    text-align: right;
+    font-size: 30px;
+    margin-right: 40px;
+    font-style: italic;
+    font-weight: lighter;
   }
 
   ul {
       margin: 50px 150px;
+      font-size:20px;
   }
   ul ul {
       margin: 20px 20px;
